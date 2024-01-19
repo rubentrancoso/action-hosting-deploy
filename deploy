@@ -1,0 +1,6 @@
+#!/bin/bash
+npm run-script build
+git add .
+git commit -a
+git push
+
