@@ -27,7 +27,7 @@ import { createCheck } from "./createCheck";
 import { createGacFile } from "./createGACFile";
 import {
   deployPreview,
-  deployProductionSite,
+  deployLiveChannelSite,
   ErrorResult,
   interpretChannelDeployResult,
 } from "./deploy";
@@ -44,7 +44,7 @@ const googleApplicationCredentials = getInput("firebaseServiceAccount", {
   required: true,
 });
 const configuredChannelId = getInput("channelId");
-const isProductionDeploy = configuredChannelId === "live";
+const isLiveChannelDeploy = configuredChannelId === "live"; // TODO:
 const token = process.env.GITHUB_TOKEN || getInput("repoToken");
 const octokit = token ? getOctokit(token) : undefined;
 const entryPoint = getInput("entryPoint");
@@ -87,9 +87,9 @@ async function run() {
     );
     endGroup();
 
-    if (isProductionDeploy) {
-      startGroup("Deploying to production site");
-      const deployment = await deployProductionSite(gacFilename, {
+    if (isLiveChannelDeploy) {
+      startGroup("Deploying to live channel site");
+      const deployment = await deployLiveChannelSite(gacFilename, {
         projectId,
         target,
         firebaseToolsVersion,

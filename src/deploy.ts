@@ -33,7 +33,7 @@ export type ChannelSuccessResult = {
   result: { [key: string]: SiteDeploy };
 };
 
-export type ProductionSuccessResult = {
+export type LiveChannelSuccessResult = {
   status: "success";
   result: {
     hosting: string | string[];
@@ -52,7 +52,7 @@ export type ChannelDeployConfig = DeployConfig & {
   channelId: string;
 };
 
-export type ProductionDeployConfig = DeployConfig & {};
+export type LiveChannelDeployConfig = DeployConfig & {};
 
 export function interpretChannelDeployResult(
   deployResult: ChannelSuccessResult
@@ -149,11 +149,11 @@ export async function deployPreview(
   return deploymentResult;
 }
 
-export async function deployProductionSite(
+export async function deployLiveChannelSite(
   gacFilename,
-  productionDeployConfig: ProductionDeployConfig
+  liveChannelDeployConfig: LiveChannelDeployConfig
 ) {
-  const { projectId, target, firebaseToolsVersion } = productionDeployConfig;
+  const { projectId, target, firebaseToolsVersion } = liveChannelDeployConfig;
 
   const deploymentText = await execWithCredentials(
     ["deploy", "--only", `hosting${target ? ":" + target : ""}`],
@@ -163,7 +163,7 @@ export async function deployProductionSite(
   );
 
   const deploymentResult = JSON.parse(deploymentText) as
-    | ProductionSuccessResult
+    | LiveChannelSuccessResult
     | ErrorResult;
 
   return deploymentResult;
